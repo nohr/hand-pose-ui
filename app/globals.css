@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  width: -moz-fit-content;
+  width: fit-content;
+  overflow-x: scroll;
+  cursor: grab;
+  /* scroll-snap-type: proximity; */
+  /* scroll-behavior: smooth; */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
