@@ -7,7 +7,7 @@ export const useUIStore = create<UIProps>((set, get) => ({
   setMotion() {
     set(() => ({ motion: !get().motion }));
   },
-  status: "loading model",
+  status: "starting camera",
   setStatus(status: UIProps["status"]): void {
     // clearTimeout(time);
     // console.log(status);

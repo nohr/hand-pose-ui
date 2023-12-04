@@ -1,20 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useModelStore } from "@/app/(cursor)/model";
 import { useUIStore } from "@/app/(ui)/ui";
 
 export default function Camera() {
-  const get_input = useModelStore((state) => state.get_input);
-  const start_input = useModelStore((state) => state.start_input);
-  const stop_input = useModelStore((state) => state.stop_input);
-  // const setStatus = useUIStore((state) => state.setStatus);
-  const selfie = useModelStore((state) => state.selfie);
-  const motion = useUIStore((state) => state.motion);
+  const [start_input, stop_input, selfie, input, hands] = useModelStore(
+    (state) => [
+      state.start_input,
+      state.stop_input,
+      state.selfie,
+      state.input,
+      state.hands,
+    ],
+  );
+  const [motion] = useUIStore((state) => [state.motion]);
 
   useEffect(() => {
-    get_input(document.querySelector("video.input_video") as HTMLVideoElement);
-  }, [get_input]);
+    useModelStore.setState({
+      input: document.querySelector("video.input_video") as HTMLVideoElement,
+    });
+  }, []);
 
   // handle focus and blur events
   useEffect(() => {
@@ -27,9 +33,34 @@ export default function Camera() {
     };
   }, [motion, start_input, stop_input]);
 
+  let lastVideoTime = -1;
+  function renderLoop(): void {
+    if (input && hands && input.currentTime !== lastVideoTime) {
+      lastVideoTime = input.currentTime;
+      const results = hands.detectForVideo(input, lastVideoTime);
+      console.log(results);
+
+      // useModelStore.setState({
+      //   results: hands.detectForVideo(input, lastVideoTime),
+      // });
+    }
+  }
+
+  useEffect(() => {
+    if (!motion) return;
+    const interval = setInterval(() => {
+      renderLoop();
+    }, 1000 / 60);
+    return () => clearInterval(interval);
+  }, [motion]);
+
   return (
     <>
       <video
+        autoPlay
+        onTimeUpdate={() => {
+          renderLoop();
+        }}
         width="1280"
         height="720"
         className={`input_video absolute top-0 -z-10 hidden  h-full w-full border-[1px] border-red-500 opacity-0 ${

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { useModelStore } from "@/app/(cursor)/model";
 import { useUIStore } from "../(ui)/ui";
@@ -8,17 +9,17 @@ import Hand from "./Hand";
 import { useGesture } from "@/hooks/useGesture";
 
 export default function Cursor() {
-  const [input, start_input, stop_input, onResults, hands, results] =
-    useModelStore((state) => [
-      state.input,
-      state.start_input,
-      state.stop_input,
-      state.onResults,
-      state.hands,
-      state.results,
+  const [input, start_input, stop_input, hands, init_hands, results] =
+    useModelStore((s) => [
+      s.input,
+      s.start_input,
+      s.stop_input,
+      s.hands,
+      s.init_hands,
+      s.results,
     ]);
-  const setStatus = useUIStore((state) => state.setStatus);
-  const motion = useUIStore((state) => state.motion);
+  const setStatus = useUIStore((s) => s.setStatus);
+  const motion = useUIStore((s) => s.motion);
   const [cursor, setCursor] = useState(false);
 
   // Handle the model functions
@@ -26,27 +27,29 @@ export default function Cursor() {
     if (!motion && input) stop_input();
     if (!motion && hands) return;
     start_input();
-
-    if (!hands) return;
-    hands.onResults(onResults);
-  }, [hands, input, motion, onResults, setStatus, start_input, stop_input]);
+  }, [hands, input, motion, start_input, stop_input]);
 
   useEffect(() => {
     if (!results) return;
     setStatus("");
   }, [results, setStatus]);
 
-  const {
-    select: { current: select },
-    drag: { current: drag },
-    zoom: { current: zoom },
-  } = useGesture(cursor);
+  useEffect(() => {
+    if (!motion || hands) return;
+    init_hands();
+  }, [motion, init_hands, hands]);
+
+  // const {
+  //   select: { current: select },
+  //   drag: { current: drag },
+  //   zoom: { current: zoom },
+  // } = useGesture(cursor);
 
   return (
     <>
       <Camera />
       <Canvas />
-      {results &&
+      {/* {results &&
         results.multiHandLandmarks.map(
           (hand: { x: number; y: number; z: number }[], index: number) => (
             <Hand
@@ -60,7 +63,7 @@ export default function Cursor() {
               key={index}
             />
           ),
-        )}
+        )} */}
     </>
   );
 }
