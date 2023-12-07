@@ -4,10 +4,9 @@ import { useEffect } from "react";
 import { useModelStore } from "@/app/(cursor)/model";
 
 export default function Camera() {
-  const [start_input, stop_input, selfie, input, hands] = useModelStore((s) => [
+  const [start_input, stop_input, input, hands] = useModelStore((s) => [
     s.start_input,
     s.stop_input,
-    s.selfie,
     s.input,
     s.hands,
   ]);
@@ -50,9 +49,7 @@ export default function Camera() {
       }}
       width="1280"
       height="720"
-      className={`input_video absolute top-0 -z-10 flex  h-full w-full border-[1px] border-red-500 opacity-0 ${
-        selfie ? "-scale-x-100" : " scale-x-100"
-      } `}
+      className={`input_video absolute top-0 -z-10 flex  h-full w-full -scale-x-100 border-[1px] border-red-500 opacity-0`}
     ></video>
   );
 }
