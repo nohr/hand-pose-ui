@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-full w-max flex-col overflow-y-scroll text-red-500">
+      <body className="flex h-full w-max flex-col overflow-y-scroll bg-white text-red-500 dark:bg-black">
         <SplashScreen />
         {children}
         <Cursor />

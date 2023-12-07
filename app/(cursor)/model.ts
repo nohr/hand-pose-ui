@@ -23,7 +23,6 @@ interface ModelProps {
    * @see {@link @mediapipe/hands/index.d.ts}
    */
   results: HandLandmarkerResult | null;
-  selfie: boolean;
   input: HTMLVideoElement | null;
   start_input: () => void;
   stop_input: () => void;
@@ -54,7 +53,6 @@ export const useModelStore = create<ModelProps>()((set, get) => ({
     })();
   },
   results: null,
-  selfie: true,
   input: null,
   start_input() {
     const video = get().input as HTMLVideoElement;
@@ -74,7 +72,7 @@ export const useModelStore = create<ModelProps>()((set, get) => ({
           video: {
             width: 1280,
             height: 720,
-            facingMode: `${get().selfie ? "user" : "environment"}`,
+            facingMode: "user",
           },
         })
         .then((stream) => {

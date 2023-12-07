@@ -132,15 +132,13 @@ export function useGesture(cursor: boolean) {
       disty.current = startY;
       return;
     }
-
+    // !fixme: the horizontal scroll is flipped
     const scrollX = distx.current - startX;
     const scrollY = disty.current - startY;
 
     // todo debounce the scroll coordinates to prevent jittering
     // todo add a threshold to prevent scrolling when the hand is not moving
     // ? return the same value if the distance is less than the threshold
-
-    console.log(scrollX, scrollY);
 
     const scroll = () =>
       window.scrollBy({
