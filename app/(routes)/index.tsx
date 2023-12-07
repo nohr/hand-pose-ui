@@ -1,3 +1,3 @@
-export { About } from "./about/about";
+export { About } from "./(about)/about";
 export { Home } from "./home";
-export { Work } from "./work/work";
+export { Work } from "./(work)/work";

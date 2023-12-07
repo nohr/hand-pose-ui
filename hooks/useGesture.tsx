@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { useModelStore } from "@/app/(cursor)/model";
 
@@ -20,12 +22,12 @@ export function useGesture(cursor: boolean) {
 
   // * zoom gesture - for zooming
   useEffect(() => {
-    if (!results || !results.multiHandLandmarks[0] || !cursor) return;
+    if (!results || !results.landmarks[0] || !cursor) return;
 
     // ! first check for two hands
-    if (results.multiHandLandmarks[1]) {
-      const { "8": index_tip_1 } = results.multiHandLandmarks[0];
-      const { "8": index_tip_2 } = results.multiHandLandmarks[1];
+    if (results.landmarks[1]) {
+      const { "8": index_tip_1 } = results.landmarks[0];
+      const { "8": index_tip_2 } = results.landmarks[1];
       if (!index_tip_1 || !index_tip_2) return;
 
       const distance = Math.sqrt(
@@ -60,12 +62,7 @@ export function useGesture(cursor: boolean) {
   ]);
 
   useEffect(() => {
-    if (
-      !results ||
-      !results.multiHandLandmarks[0] ||
-      results.multiHandLandmarks[1] ||
-      !cursor
-    )
+    if (!results || !results.landmarks[0] || results.landmarks[1] || !cursor)
       return;
 
     // ! only one hand is detected
@@ -76,7 +73,7 @@ export function useGesture(cursor: boolean) {
       "12": middle_tip,
       "16": ring_tip,
       "20": pinky_tip,
-    } = results.multiHandLandmarks[0];
+    } = results.landmarks[0];
     if (!index_tip || !thumb_tip || !middle_tip || !ring_tip || !pinky_tip)
       return;
 
@@ -142,6 +139,8 @@ export function useGesture(cursor: boolean) {
     // todo debounce the scroll coordinates to prevent jittering
     // todo add a threshold to prevent scrolling when the hand is not moving
     // ? return the same value if the distance is less than the threshold
+
+    console.log(scrollX, scrollY);
 
     const scroll = () =>
       window.scrollBy({
